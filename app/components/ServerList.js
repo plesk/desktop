@@ -1,29 +1,22 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+const storage = window.require('electron-json-storage');
 
 export default class ServerList extends React.Component {
   constructor() {
     super();
 
-    this.state = { servers: [] };
+    this.state = { servers: {} };
   }
 
   componentDidMount() {
-    // TODO: replace with electron-json-storage
-    this.setState({
-      servers: {
-        'example.dom': {
-          version: '17.5.3'
-        },
-        'plesk.com': {
-          version: '12.5.30'
-        }
-      }
+    storage.get('servers', (error, servers) => {
+      this.setState({ 'servers': servers });
     });
   }
 
   render() {
-    const { servers } = this.state || {};
+    const { servers } = this.state;
     return (
       <ul className="nav nav-sidebar">
         {Object.keys(servers).map((name) => {

@@ -19,8 +19,11 @@
     "babel-preset-es2015": "^6.24.0",
     "babel-preset-react": "^6.23.0",
     "babelify": "^7.3.0",
+    "electron-json-storage": "^3.0.2",
+    "plesk-api-client": "^1.0.3",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
-    "react-router-dom": "^4.0.0"
+    "react-router-dom": "^4.0.0",
+    "xml2js": "^0.4.17"
   }
 }

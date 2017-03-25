@@ -1,7 +1,21 @@
-const storage = window.require('electron-json-storage');
 import React from 'react';
+import PleskApi from 'plesk-api-client';
+import { parseString } from 'xml2js';
+const storage = window.require('electron-json-storage');
 
 export default class ConnectForm extends React.Component {
+  constructor() {
+    super();
+
+    this.state = { servers: {} };
+  }
+
+  componentDidMount() {
+    storage.get('servers', (error, servers) => {
+      this.setState({ 'servers': servers });
+    });
+  }
+
   render() {
     return (
       <div>
@@ -30,14 +44,34 @@ export default class ConnectForm extends React.Component {
     let host = event.target.querySelector('#host');
     let login = event.target.querySelector('#login');
     let pw = event.target.querySelector('#pw');
-    this.saveLoginData(host.value, login.value, pw.value);
+    this.connectServer(host.value, login.value, pw.value);
     this.props.history.push('/');
   }
 
-  saveLoginData(host, login, password) {
+  connectServer(host, login, password) {
     if (!host) return;
-    storage.set(host, {login: login, password: password}, (error) => {
+
+    const { servers } = this.state;
+    servers[host] = { login: login, password: password };
+
+    storage.set('servers', servers, (error) => {
       if (error) throw error;
+    });
+
+    // TODO: prepare real server description / details
+    const request =
+      `<packet>
+        <server>
+          <get_protos/>
+        </server>
+      </packet>`;
+
+    const client = new PleskApi.Client(host, 8880, 'http');
+    client.setCredentials(login, password);
+    client.request(request, (response) => {
+      parseString(response, (err, result) => {
+        console.dir(result);
+      });
     });
   }
 }
