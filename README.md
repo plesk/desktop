@@ -8,4 +8,5 @@ Installation instructions:
 * clone the repo
 * install Node
 * npm install
+* npm run watch (on a separate console)
 * npm start
