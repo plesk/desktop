@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import Dashboard from './Dashboard';
 import ServerDetails from './ServerDetails';
+import ServerList from './ServerList';
 
 export default class App extends React.Component {
   render() {
@@ -14,9 +15,7 @@ export default class App extends React.Component {
                 <li><Link to="/">Overview</Link></li>
               </ul>
               <h5>Servers</h5>
-              <ul className="nav nav-sidebar">
-                <li><Link to="/server/show/example.dom">example.dom</Link></li>
-              </ul>
+              <ServerList/>
             </div>
             <div className="col-xs-9 col-xs-offset-3 col-xs-10 col-xs-offset-2 main">
               <Route exact path="/" component={Dashboard}/>

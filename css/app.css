@@ -49,3 +49,6 @@ body {
 .main .page-header {
   margin-top: 0;
 }
+.sidebar .plesk-version {
+  color: #555;
+}
