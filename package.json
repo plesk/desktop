@@ -1,0 +1,14 @@
+{
+  "name": "plesk-desktop",
+  "version": "1.0.0",
+  "description": "Desktop app for Plesk servers management.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Plesk",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "electron": "~1.6.2"
+  }
+}
