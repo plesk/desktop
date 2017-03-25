@@ -12,7 +12,7 @@ export default class App extends React.Component {
           <div className="row">
             <div className="col-sm-3 col-md-2 sidebar">
               <ul className="nav nav-sidebar">
-                <li><Link to="/">Overview</Link></li>
+                <li><Link to="/">Dashboard</Link></li>
               </ul>
               <h5>Servers</h5>
               <ServerList/>
