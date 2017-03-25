@@ -28,7 +28,7 @@ export default class ServerList extends React.Component {
       <ul className="nav nav-sidebar">
         {Object.keys(servers).map((name) => {
             return (
-              <li>
+              <li key={name}>
                 <Link to={`/server/show/${name}`}>
                   {name}<br/>
                   <small className="plesk-version">{servers[name].version}</small>
