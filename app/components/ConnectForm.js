@@ -1,3 +1,4 @@
+const storage = window.require('electron-json-storage');
 import React from 'react';
 
 export default class ConnectForm extends React.Component {
@@ -30,9 +31,13 @@ export default class ConnectForm extends React.Component {
         let login = event.target.querySelector('#login');
         let pw = event.target.querySelector('#pw');
         this.saveLoginData(host.value, login.value, pw.value);
+        this.props.history.push('/');
     }
 
     saveLoginData(host, login, password) {
-        alert('Todo: Implement persistence of server credentials');
+        if (!host) return;
+        storage.set(host, {login: login, password: password}, (error) => {
+            if (error) throw error;
+        });
     }
 }
