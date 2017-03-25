@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import App from './components/App';
 
 ReactDOM.render(
-  <div>TODO</div>,
+  <App/>,
   document.getElementById('container')
 );
