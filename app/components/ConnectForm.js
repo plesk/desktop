@@ -13,10 +13,6 @@ class ConnectForm extends React.Component {
             <input type="text" className="form-control" id="host" placeholder="host.com"/>
           </div>
           <div className="form-group">
-            <label type="text" htmlFor="login">Login</label>
-            <input type="text" className="form-control" id="login" placeholder="username"/>
-          </div>
-          <div className="form-group">
             <label type="text" htmlFor="pw">Passwort</label>
             <input type="password" className="form-control" id="pw" placeholder="password"/>
           </div>
@@ -29,12 +25,11 @@ class ConnectForm extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     let host = event.target.querySelector('#host');
-    let login = event.target.querySelector('#login');
     let pw = event.target.querySelector('#pw');
-    this.connectServer(host.value, login.value, pw.value);
+    this.connectServer(host.value, pw.value);
   }
 
-  connectServer(host, login, password) {
+  connectServer(host, password) {
     if (!host) {
       alert('Please define the host');
       return;
@@ -46,7 +41,7 @@ class ConnectForm extends React.Component {
       </packet>`;
 
     const client = new PleskApi.Client(host, 8880, 'http');
-    client.setCredentials(login, password);
+    client.setCredentials('admin', password);
     client.request(request)
       .then((response) => {
         parseString(response, (error, result) => {
@@ -61,7 +56,7 @@ class ConnectForm extends React.Component {
           }
 
           const stats = result.packet.server[0].get[0].result[0].stat[0];
-          this.context.storage.connectServer(host, login, password, {
+          this.context.storage.connectServer(host, 'admin', password, {
             version: stats.version[0].plesk_version[0],
             os: stats.version[0].plesk_os[0],
             osVersion: stats.version[0].plesk_os_version[0]
