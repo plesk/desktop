@@ -15,7 +15,7 @@ export default class App extends React.Component {
               <ul className="nav nav-sidebar">
                 <li><Link to="/">Dashboard</Link></li>
               </ul>
-              <h5>Servers <Link to="/server/add"><span className="fa fa-plus"/></Link></h5>
+              <h5>Servers</h5>
               <ServerList/>
             </div>
             <div className="col-xs-9 col-xs-offset-3 col-xs-10 col-xs-offset-2 main">
