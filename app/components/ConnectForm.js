@@ -38,21 +38,21 @@ class ConnectForm extends React.Component {
   connectServer(host, login, password) {
     if (!host) return;
 
-    this.context.storage.connectServer(host, login, password);
-
-    // TODO: prepare real server description / details
     const request =
       `<packet>
-        <server>
-          <get_protos/>
-        </server>
+        <server><get><stat/></get></server>
       </packet>`;
 
     const client = new PleskApi.Client(host, 8880, 'http');
     client.setCredentials(login, password);
     client.request(request, (response) => {
       parseString(response, (err, result) => {
-        console.dir(result);
+        const stats = result.packet.server[0].get[0].result[0].stat[0];
+        this.context.storage.connectServer(host, login, password, {
+          version: stats.version[0].plesk_version[0],
+          os: stats.version[0].plesk_os[0],
+          osVersion: stats.version[0].plesk_os_version[0]
+        });
       });
     });
   }

@@ -4,14 +4,16 @@ import { Link } from 'react-router-dom';
 class ServerList extends React.Component {
   render() {
     const { servers } = this.context.storage;
+
     return (
       <ul className="nav nav-sidebar">
         {Object.keys(servers).map((name) => {
+            const serverDetails = servers[name].details || {};
             return (
               <li key={name}>
                 <Link to={`/server/show/${name}`}>
                   {name}<br/>
-                  <small className="plesk-version">{servers[name].version}</small>
+                  <small className="plesk-version">{`${serverDetails.version}, ${serverDetails.os} ${serverDetails.osVersion}`}</small>
                 </Link>
               </li>
             );

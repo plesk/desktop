@@ -39,9 +39,9 @@ class Storage extends Component {
         };
     }
 
-    connectServer(host, login, password) {
+    connectServer(host, login, password, details) {
         const { servers } = this.state;
-        servers[host] = { login, password };
+        servers[host] = { login, password, details };
 
         storage.set('servers', servers, error => {
             if (error) {
