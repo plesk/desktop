@@ -6,7 +6,7 @@
   "scripts": {
     "start": "electron .",
     "watch": "watchify app/app.js -t babelify -o js/bundle.js",
-    "build:osx": "electron-packager ./ --platform=darwin --arch=x64 --out=dist/osx"
+    "build:osx": "electron-packager ./ --platform=darwin --arch=x64 --out=dist/osx --icon build/icon.icns"
   },
   "author": "Plesk",
   "license": "Apache-2.0",
