@@ -1,21 +1,7 @@
 import React from 'react';
-import {HashRouter as Router, Route, Link} from 'react-router-dom';
-const storage = window.require('electron-json-storage');
+import { Link } from 'react-router-dom';
 
-export default class Dashboard extends React.Component {
-  componentDidMount() {
-    storage.get('servers', (error, servers) => {
-      this.setState({'servers': servers});
-    });
-  }
-
-  serverCount() {
-    if (this.state && this.state.servers) {
-      return Object.keys(this.state.servers).length || 0;
-    }
-    return 0;
-  }
-
+class Dashboard extends React.Component {
   render() {
     return (
       <div>
@@ -27,7 +13,7 @@ export default class Dashboard extends React.Component {
           <tbody>
           <tr>
             <th>Servers</th>
-            <td>{this.serverCount()}</td>
+            <td>{Object.keys(this.context.storage.servers).length}</td>
           </tr>
           </tbody>
         </table>
@@ -35,3 +21,8 @@ export default class Dashboard extends React.Component {
     );
   }
 }
+Dashboard.contextTypes = {
+  storage: React.PropTypes.object,
+};
+
+export default Dashboard;
