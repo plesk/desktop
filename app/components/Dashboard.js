@@ -9,14 +9,15 @@ export default class Dashboard extends React.Component {
     });
   }
 
-  serverCount() {
-    if (this.state && this.state.servers) {
-      return Object.keys(this.state.servers).length || 0;
+  serverCount(servers) {
+    if (servers) {
+      return Object.keys(servers).length || 0;
     }
     return 0;
   }
 
   render() {
+    const { servers } = this.context.storage;
     return (
       <div>
         <h1 className="page-header">Dashboard</h1>
@@ -27,7 +28,7 @@ export default class Dashboard extends React.Component {
           <tbody>
           <tr>
             <th>Servers</th>
-            <td>{this.serverCount()}</td>
+            <td>{this.serverCount(servers)}</td>
           </tr>
           </tbody>
         </table>
@@ -35,3 +36,7 @@ export default class Dashboard extends React.Component {
     );
   }
 }
+
+Dashboard.contextTypes = {
+  storage: React.PropTypes.object,
+};
