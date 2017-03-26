@@ -1,14 +1,17 @@
 import React from 'react';
-const electron = window.require('electron');
+import ExternalLink from './ExternalLink';
 
 class ServerDetails extends React.Component {
   render() {
     const { serverName } = this.props.match.params;
+    const { servers } = this.context.storage;
+    const { login, password } = servers[serverName];
+
     return (
       <div>
         <h1 className="page-header">Server {serverName}</h1>
         <a className="btn btn-default" onClick={this.handleDisconnect.bind(this)}>Disconnect</a>&nbsp;
-        <a className="btn btn-default" onClick={this.handleLogin.bind(this)}>Login to Plesk UI</a>
+        <ExternalLink className="btn btn-default" href={`http://${serverName}:8880/login_up.php?login_name=${login}&passwd=${password}`}>Login to Plesk UI</ExternalLink>
       </div>
     );
   }
@@ -21,17 +24,6 @@ class ServerDetails extends React.Component {
     this.context.storage.disconnectServer(serverName);
 
     this.props.history.push('/');
-  }
-
-  handleLogin(event) {
-    event.preventDefault();
-
-    const { serverName } = this.props.match.params;
-    const { servers } = this.context.storage;
-
-    const { login, password } = servers[serverName];
-    const loginUrl = `http://${serverName}:8880/login_up.php?login_name=${login}&passwd=${password}`;
-    electron.shell.openExternal(loginUrl);
   }
 }
 ServerDetails.contextTypes = {
