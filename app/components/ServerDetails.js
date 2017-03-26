@@ -23,11 +23,11 @@ class ServerDetails extends React.Component {
             <table className="table table-bordered table-hover">
               <tbody>
                 <tr>
-                  <td>Version</td>
+                  <th>Version</th>
                   <td>{server && server.details && server.details.version}</td>
                 </tr>
                 <tr>
-                  <td>OS</td>
+                  <th>OS</th>
                   <td>{server && server.details && `${server.details.os} ${server.details.osVersion}`}</td>
                 </tr>
               </tbody>
@@ -37,12 +37,8 @@ class ServerDetails extends React.Component {
             <table className="table table-bordered table-hover">
               <tbody>
                 <tr>
-                  <td>Domains</td>
-                  <td>?</td>
-                </tr>
-                <tr>
-                  <td>Clients</td>
-                  <td>?</td>
+                  <th>Subscriptions</th>
+                  <td>{server && server.domains && server.domains.length || 0}</td>
                 </tr>
               </tbody>
             </table>
