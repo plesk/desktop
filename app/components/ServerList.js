@@ -12,6 +12,7 @@ class ServerList extends React.Component {
             return (
               <li key={name}>
                 <Link to={`/server/show/${name}`}>
+                  <span className="glyphicon glyphicon-globe"></span>&nbsp;
                   {name}<br/>
                   <small className="plesk-version">{`${serverDetails.version}, ${serverDetails.os} ${serverDetails.osVersion}`}</small>
                 </Link>

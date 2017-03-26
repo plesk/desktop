@@ -16,7 +16,10 @@ class ConnectForm extends React.Component {
             <label type="text" htmlFor="pw">Password</label>
             <input type="password" className="form-control" id="pw" placeholder="password"/>
           </div>
-          <button type="submit" className="btn btn-default">Connect</button>
+          <button type="submit" className="btn btn-default">
+            <span className="glyphicon glyphicon-ok"></span>&nbsp;
+            Connect
+          </button>
         </form>
       </div>
     );

@@ -17,13 +17,13 @@ export default class App extends React.Component {
             <div className="row">
               <div className="col-sm-2 col-xs-3 sidebar">
                 <ul className="nav nav-sidebar">
-                  <li><Link to="/">Dashboard</Link></li>
+                  <li><Link to="/"><span className="glyphicon glyphicon-home"></span>&nbsp;Dashboard</Link></li>
                 </ul>
                 <h5>Servers</h5>
                 <ServerList/>
                 <hr className="divider"/>
                 <ul className="nav nav-sidebar">
-                  <li><Link to="/about">About</Link></li>
+                  <li><Link to="/about"><span className="glyphicon glyphicon-question-sign"></span>&nbsp;About</Link></li>
                 </ul>
               </div>
               <div className="col-sm-10 col-sm-offset-2 col-xs-9 col-xs-offset-3 main">

@@ -7,7 +7,10 @@ class Dashboard extends React.Component {
       <div>
         <h1 className="page-header">Dashboard</h1>
         <p>
-          <Link to="/server/add" className="btn btn-default">Connect a server</Link>
+          <Link to="/server/add" className="btn btn-default">
+            <span className="glyphicon glyphicon-plus"></span>&nbsp;
+            Connect a server
+          </Link>
         </p>
         <table className="table table-bordered table-hover">
           <thead>

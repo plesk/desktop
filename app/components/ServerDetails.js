@@ -14,8 +14,14 @@ class ServerDetails extends React.Component {
         <div className="row">
           <div className="col-xs-12">
             <h1 className="page-header">Server {serverName}</h1>
-            <a className="btn btn-default" onClick={this.handleDisconnect.bind(this)}>Disconnect</a>&nbsp;
-            <a className="btn btn-default" onClick={this.handleLogin.bind(this)}>Login to Plesk UI</a>
+            <a className="btn btn-default" onClick={this.handleDisconnect.bind(this)}>
+              <span className="glyphicon glyphicon-remove"></span>&nbsp;
+              Disconnect
+            </a>&nbsp;
+            <a className="btn btn-default" onClick={this.handleLogin.bind(this)}>
+              <span className="glyphicon glyphicon-log-in"></span>&nbsp;
+              Login to Plesk UI
+            </a>
           </div>
         </div>
         <div className="row top-buffer">
@@ -46,7 +52,10 @@ class ServerDetails extends React.Component {
         </div>
         <div className="row">
           <div className="col-xs-12">
-            <Link to={`/server/subscription/${serverName}`} className="btn btn-default">Create Subscription</Link>
+            <Link to={`/server/subscription/${serverName}`} className="btn btn-default">
+              <span className="glyphicon glyphicon-plus"></span>&nbsp;
+              Create Subscription
+            </Link>
           </div>
         </div>
         <div className="row top-buffer">
@@ -64,9 +73,14 @@ class ServerDetails extends React.Component {
                     <tr key={domain.domain}>
                       <td>{domain.domain}</td>
                       <td>
-                        <a href="#" data-id={domain.domain} onClick={this.handleLoginSubscription.bind(this)}>Login</a>
-                        &nbsp;|&nbsp;
-                        <a href="#" data-id={domain.domain} onClick={this.handleRemoveSubscription.bind(this)}>Remove</a>
+                        <a href="#" data-id={domain.domain} className="btn btn-default btn-xs" onClick={this.handleLoginSubscription.bind(this)}>
+                          <span className="glyphicon glyphicon-log-in"></span>&nbsp;
+                          Login
+                        </a>&nbsp;
+                        <a href="#" data-id={domain.domain} className="btn btn-default btn-xs" onClick={this.handleRemoveSubscription.bind(this)}>
+                          <span className="glyphicon glyphicon-remove"></span>&nbsp;
+                          Remove
+                        </a>
                       </td>
                     </tr>
                   );
