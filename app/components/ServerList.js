@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 const storage = window.require('electron-json-storage');
 
 export default class ServerList extends React.Component {
