@@ -27,8 +27,14 @@ class ServerDetails extends React.Component {
     event.preventDefault();
 
     const { serverName } = this.props.match.params;
-    const loginUrl = `http://${serverName}:8880/`;
-    electron.shell.openExternal(loginUrl)
+
+    storage.get('servers', (error, servers) => {
+      servers[serverName];
+
+      const { login, password } = servers[serverName];
+      const loginUrl = `http://${serverName}:8880/login_up.php?login_name=${login}&passwd=${password}`;
+      electron.shell.openExternal(loginUrl);
+    });
   }
 }
 ServerDetails.contextTypes = {
