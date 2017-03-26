@@ -1,21 +1,8 @@
 import React from 'react';
 import PleskApi from 'plesk-api-client';
 import { parseString } from 'xml2js';
-const storage = window.require('electron-json-storage');
 
-export default class ConnectForm extends React.Component {
-  constructor() {
-    super();
-
-    this.state = { servers: {} };
-  }
-
-  componentDidMount() {
-    storage.get('servers', (error, servers) => {
-      this.setState({ 'servers': servers });
-    });
-  }
-
+class ConnectForm extends React.Component {
   render() {
     return (
       <div>
@@ -51,12 +38,7 @@ export default class ConnectForm extends React.Component {
   connectServer(host, login, password) {
     if (!host) return;
 
-    const { servers } = this.state;
-    servers[host] = { login: login, password: password };
-
-    storage.set('servers', servers, (error) => {
-      if (error) throw error;
-    });
+    this.context.storage.connectServer(host, login, password);
 
     // TODO: prepare real server description / details
     const request =
@@ -75,3 +57,8 @@ export default class ConnectForm extends React.Component {
     });
   }
 }
+ConnectForm.contextTypes = {
+    storage: React.PropTypes.object,
+};
+
+export default ConnectForm;

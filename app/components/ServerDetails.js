@@ -1,8 +1,7 @@
 import React from 'react';
-const storage = window.require('electron-json-storage');
 const electron = window.require('electron');
 
-export default class ServerDetails extends React.Component {
+class ServerDetails extends React.Component {
   render() {
     const { serverName } = this.props.match.params;
     return (
@@ -19,12 +18,7 @@ export default class ServerDetails extends React.Component {
 
     const { serverName } = this.props.match.params;
 
-    storage.get('servers', (error, servers) => {
-      delete servers[serverName];
-      storage.set('servers', servers, (error) => {
-        if (error) throw error;
-      });
-    });
+    this.context.storage.disconnectServer(serverName);
 
     this.props.history.push('/');
   }
@@ -37,3 +31,8 @@ export default class ServerDetails extends React.Component {
     electron.shell.openExternal(loginUrl)
   }
 }
+ServerDetails.contextTypes = {
+    storage: React.PropTypes.object,
+};
+
+export default ServerDetails;
