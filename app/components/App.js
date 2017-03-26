@@ -20,7 +20,7 @@ export default class App extends React.Component {
             </div>
             <div className="col-xs-9 col-xs-offset-3 col-xs-10 col-xs-offset-2 main">
               <Route exact path="/" component={Dashboard}/>
-              <Route exact path="/server/add" component={ConnectForm}/>
+              <Route path="/server/add" component={ConnectForm}/>
               <Route path="/server/show/:serverName" component={ServerDetails}/>
             </div>
           </div>
