@@ -3,12 +3,39 @@ const electron = window.require('electron');
 
 class ServerDetails extends React.Component {
   render() {
-    const { serverName } = this.props.match.params;
+    const {serverName} = this.props.match.params;
+    const {servers} = this.context.storage;
+    let server = servers[serverName];
+
     return (
       <div>
-        <h1 className="page-header">Server {serverName}</h1>
-        <a className="btn btn-default" onClick={this.handleDisconnect.bind(this)}>Disconnect</a>&nbsp;
-        <a className="btn btn-default" onClick={this.handleLogin.bind(this)}>Login to Plesk UI</a>
+        <div className="row">
+          <div className="col-xs-12">
+            <h1 className="page-header">Server {serverName}</h1>
+            <a className="btn btn-default" onClick={this.handleDisconnect.bind(this)}>Disconnect</a>&nbsp;
+            <a className="btn btn-default" onClick={this.handleLogin.bind(this)}>Login to Plesk UI</a>
+          </div>
+        </div>
+        <div className="row top-buffer">
+          <div className="col-xs-4">
+            <table className="table table-bordered table-hover">
+              <tbody>
+              <tr>
+                <td>Version: </td>
+                <td>{server.version}</td>
+              </tr>
+              <tr>
+                <td># of Domains:</td>
+                <td>?</td>
+              </tr>
+              <tr>
+                <td># of Clients:</td>
+                <td>?</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     );
   }
@@ -16,7 +43,7 @@ class ServerDetails extends React.Component {
   handleDisconnect(event) {
     event.preventDefault();
 
-    const { serverName } = this.props.match.params;
+    const {serverName} = this.props.match.params;
 
     this.context.storage.disconnectServer(serverName);
 
@@ -35,7 +62,7 @@ class ServerDetails extends React.Component {
   }
 }
 ServerDetails.contextTypes = {
-    storage: React.PropTypes.object,
+  storage: React.PropTypes.object,
 };
 
 export default ServerDetails;

@@ -32,6 +32,10 @@ body {
   background-color: #428bca;
 }
 
+.top-buffer {
+  margin-top:20px;
+}
+
 .main {
   padding: 20px;
 }

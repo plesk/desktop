@@ -10,12 +10,12 @@ class Dashboard extends React.Component {
           <Link to="/server/add" className="btn btn-default">Connect a server</Link>
         </p>
         <table className="table table-bordered table-hover">
-          <tbody>
-          <tr>
-            <th>Servers</th>
-            <td>{Object.keys(this.context.storage.servers).length}</td>
-          </tr>
-          </tbody>
+          <thead>
+            <tr>
+              <th>Servers</th>
+              <td>{Object.keys(this.context.storage.servers).length}</td>
+            </tr>
+          </thead>
         </table>
       </div>
     );
