@@ -5,6 +5,7 @@ import Dashboard from './Dashboard';
 import ServerDetails from './ServerDetails';
 import ServerList from './ServerList';
 import ConnectForm from './ConnectForm';
+import SubscriptionForm from './SubscriptionForm';
 import About from "./About";
 
 export default class App extends React.Component {
@@ -29,6 +30,7 @@ export default class App extends React.Component {
                 <Route exact path="/" component={Dashboard}/>
                 <Route path="/server/add" component={ConnectForm}/>
                 <Route path="/server/show/:serverName" component={ServerDetails}/>
+                <Route path="/server/subscription/:serverName" component={SubscriptionForm}/>
                 <Route path="/about" component={About}/>
               </div>
             </div>

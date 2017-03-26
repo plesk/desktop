@@ -35,32 +35,49 @@ class Storage extends Component {
                 servers: this.state.servers,
                 connectServer: this.connectServer.bind(this),
                 disconnectServer: this.disconnectServer.bind(this),
+                addSubscription: this.addSubscription.bind(this),
+                removeSubscription: this.removeSubscription.bind(this)
             },
         };
     }
 
     connectServer(host, login, password, details) {
-        const { servers } = this.state;
-        servers[host] = { login, password, details };
-
-        storage.set('servers', servers, error => {
-            if (error) {
-                throw error;
-            }
-            this.setState({ servers });
-        });
+      const { servers } = this.state;
+      servers[host] = { login, password, details };
+      this.saveServersState(servers);
     }
 
     disconnectServer(host) {
-        const { servers } = this.state;
-        delete servers[host];
+      const { servers } = this.state;
+      delete servers[host];
+      this.saveServersState(servers);
+    }
 
-        storage.set('servers', servers, (error) => {
-            if (error) {
-                throw error;
-            }
-            this.setState({ servers });
-        });
+    addSubscription(host, domain, password, ip) {
+      const { servers } = this.state;
+      servers[host].domains = servers[host].domains || [];
+      servers[host].domains.push({
+        domain: domain,
+        password: password,
+        ip: ip
+      });
+      this.saveServersState(servers);
+    }
+
+    removeSubscription(host, domain) {
+      const { servers } = this.state;
+      servers[host].domains = servers[host].domains || [];
+      servers[host].domains = servers[host].domains.filter((item) => domain != item.domain)
+      this.saveServersState(servers);
+    }
+
+    saveServersState(servers) {
+      storage.set('servers', servers, (error) => {
+        if (error) {
+          throw error;
+        }
+        this.setState({ servers });
+      });
     }
 }
 
