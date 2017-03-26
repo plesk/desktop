@@ -5,14 +5,30 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "watch": "watchify app/app.js -t babelify -o js/bundle.js"
+    "watch": "watchify app/app.js -t babelify -o js/bundle.js",
+    "build:osx": "electron-packager ./ --platform=darwin --arch=x64 --out=dist/osx"
   },
   "author": "Plesk",
   "license": "Apache-2.0",
+  "build": {
+    "app-bundle-id": "com.plesk.plesk-desktop",
+    "app-category-type": "public.app-category.developer-tools",
+    "productName": "Plesk Desktop",
+    "osx": {
+      "title": "Plesk Desktop",
+      "window": {
+        "position": {
+          "x": 250,
+          "y": 250
+        }
+      }
+    }
+  },
   "devDependencies": {
     "electron": "~1.6.2",
     "electron-builder": "^3.25.0",
     "electron-packager": "^7.0.1",
+    "electron-prebuilt": "^1.4.13",
     "watchify": "^3.9.0"
   },
   "dependencies": {
