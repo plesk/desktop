@@ -26,6 +26,8 @@ class SubscriptionForm extends React.Component {
     event.preventDefault();
     let domain = event.target.querySelector('#domain');
     let pw = event.target.querySelector('#pw');
+    const button = event.target.querySelector('.btn');
+    button.textContent = 'Please wait...';
     this.createSubscription(domain.value, pw.value);
   }
 
