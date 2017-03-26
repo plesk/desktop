@@ -54,7 +54,7 @@ class ServerDetails extends React.Component {
           </div>
         </div>
         <div className="row top-buffer">
-          <div className="col-xs-5">
+          <div className="col-xs-12">
             <table className="table table-bordered table-hover">
               <thead>
                 <tr>
