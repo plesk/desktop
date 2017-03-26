@@ -13,7 +13,7 @@ class ConnectForm extends React.Component {
             <input type="text" className="form-control" id="host" placeholder="host.com"/>
           </div>
           <div className="form-group">
-            <label type="text" htmlFor="pw">Passwort</label>
+            <label type="text" htmlFor="pw">Password</label>
             <input type="password" className="form-control" id="pw" placeholder="password"/>
           </div>
           <button type="submit" className="btn btn-default">Connect</button>
