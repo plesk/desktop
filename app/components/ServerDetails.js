@@ -3,9 +3,9 @@ const electron = window.require('electron');
 
 class ServerDetails extends React.Component {
   render() {
-    const {serverName} = this.props.match.params;
-    const {servers} = this.context.storage;
-    let server = servers[serverName];
+    const { serverName } = this.props.match.params;
+    const { servers } = this.context.storage;
+    const server = servers[serverName];
 
     return (
       <div>
@@ -17,21 +17,31 @@ class ServerDetails extends React.Component {
           </div>
         </div>
         <div className="row top-buffer">
-          <div className="col-xs-4">
+          <div className="col-xs-5">
             <table className="table table-bordered table-hover">
               <tbody>
-              <tr>
-                <td>Version: </td>
-                <td>{server.version}</td>
-              </tr>
-              <tr>
-                <td># of Domains:</td>
-                <td>?</td>
-              </tr>
-              <tr>
-                <td># of Clients:</td>
-                <td>?</td>
-              </tr>
+                <tr>
+                  <td>Version</td>
+                  <td>{server && server.details.version}</td>
+                </tr>
+                <tr>
+                  <td>OS</td>
+                  <td>{server && `${server.details.os} ${server.details.osVersion}`}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div className="col-xs-5">
+            <table className="table table-bordered table-hover">
+              <tbody>
+                <tr>
+                  <td>Domains</td>
+                  <td>?</td>
+                </tr>
+                <tr>
+                  <td>Clients</td>
+                  <td>?</td>
+                </tr>
               </tbody>
             </table>
           </div>
