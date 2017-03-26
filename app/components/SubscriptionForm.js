@@ -45,11 +45,6 @@ class SubscriptionForm extends React.Component {
 
     const request =
       `<packet>
-        <server><get><stat/></get></server>
-      </packet>`;
-/*
-    const request =
-      `<packet>
         <request-settings>
           <setting>
             <name>plesk_rpc_forwarding_to_ext</name>
@@ -85,7 +80,7 @@ class SubscriptionForm extends React.Component {
           </add>
         </webspace>
       </packet>`;
-*/
+
     const client = new PleskApi.Client(serverName, 8880, 'http');
     client.setCredentials(login, password);
     client.request(request)
@@ -101,12 +96,8 @@ class SubscriptionForm extends React.Component {
             return;
           }
 
-          // TODO: parse response and extract the IP
-          console.log(result);
-          const ip = '1.2.3.4';
-
+          const ip = result.packet.webspace[0].add[0].result[0].ip[0];
           this.context.storage.addSubscription(serverName, domain, domainPassword, ip);
-
           this.props.history.push(`/server/show/${serverName}`);
         });
       })
