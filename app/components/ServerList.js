@@ -1,22 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-const storage = window.require('electron-json-storage');
 
-export default class ServerList extends React.Component {
-  constructor() {
-    super();
-
-    this.state = { servers: {} };
-  }
-
-  componentDidMount() {
-    storage.get('servers', (error, servers) => {
-      this.setState({ 'servers': servers });
-    });
-  }
-
+class ServerList extends React.Component {
   render() {
-    const { servers } = this.state;
+    const { servers } = this.context.storage;
     return (
       <ul className="nav nav-sidebar">
         {Object.keys(servers).map((name) => {
@@ -33,3 +20,8 @@ export default class ServerList extends React.Component {
     );
   }
 }
+ServerList.contextTypes = {
+    storage: React.PropTypes.object,
+};
+
+export default ServerList;
