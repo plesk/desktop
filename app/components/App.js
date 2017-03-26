@@ -4,6 +4,7 @@ import Dashboard from './Dashboard';
 import ServerDetails from './ServerDetails';
 import ServerList from './ServerList';
 import ConnectForm from './ConnectForm';
+import About from "./About";
 
 export default class App extends React.Component {
   render() {
@@ -17,11 +18,16 @@ export default class App extends React.Component {
               </ul>
               <h5>Servers <Link to="/server/add"><span className="fa fa-plus"/></Link></h5>
               <ServerList/>
+              <hr className="divider"/>
+              <ul className="nav nav-sidebar">
+                <li><Link to="/about">About</Link></li>
+              </ul>
             </div>
             <div className="col-sm-10 col-sm-offset-2 col-xs-9 col-xs-offset-3 main">
               <Route exact path="/" component={Dashboard}/>
               <Route path="/server/add" component={ConnectForm}/>
               <Route path="/server/show/:serverName" component={ServerDetails}/>
+              <Route path="/about" component={About}/>
             </div>
           </div>
         </div>
