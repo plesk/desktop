@@ -32,11 +32,13 @@ class ConnectForm extends React.Component {
     let login = event.target.querySelector('#login');
     let pw = event.target.querySelector('#pw');
     this.connectServer(host.value, login.value, pw.value);
-    this.props.history.push('/');
   }
 
   connectServer(host, login, password) {
-    if (!host) return;
+    if (!host) {
+      alert('Please define the host');
+      return;
+    }
 
     const request =
       `<packet>
@@ -45,16 +47,32 @@ class ConnectForm extends React.Component {
 
     const client = new PleskApi.Client(host, 8880, 'http');
     client.setCredentials(login, password);
-    client.request(request, (response) => {
-      parseString(response, (err, result) => {
-        const stats = result.packet.server[0].get[0].result[0].stat[0];
-        this.context.storage.connectServer(host, login, password, {
-          version: stats.version[0].plesk_version[0],
-          os: stats.version[0].plesk_os[0],
-          osVersion: stats.version[0].plesk_os_version[0]
+    client.request(request)
+      .then((response) => {
+        parseString(response, (error, result) => {
+          if (error) {
+            console.log(error);
+            return;
+          }
+
+          if (result.packet.system) {
+            alert(result.packet.system[0].errtext[0]);
+            return;
+          }
+
+          const stats = result.packet.server[0].get[0].result[0].stat[0];
+          this.context.storage.connectServer(host, login, password, {
+            version: stats.version[0].plesk_version[0],
+            os: stats.version[0].plesk_os[0],
+            osVersion: stats.version[0].plesk_os_version[0]
+          });
+
+          this.props.history.push('/');
         });
+      })
+      .catch((error) => {
+        alert(error.message);
       });
-    });
   }
 }
 ConnectForm.contextTypes = {
