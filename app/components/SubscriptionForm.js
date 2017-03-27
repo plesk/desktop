@@ -9,7 +9,7 @@ class SubscriptionForm extends React.Component {
         <h2>Add a New Subscription</h2>
         <form onSubmit={this.handleSubmit.bind(this)}>
           <div className="form-group">
-            <label htmlFor="host">Domain Name</label>
+            <label htmlFor="domain">Domain Name</label>
             <input type="text" className="form-control" id="domain" placeholder="domain.com"/>
           </div>
           <div className="form-group">
@@ -17,8 +17,7 @@ class SubscriptionForm extends React.Component {
             <input type="password" className="form-control" id="pw" placeholder="password"/>
           </div>
           <button type="submit" className="btn btn-default">
-            <span className="glyphicon glyphicon-ok"></span>&nbsp;
-            Create
+            <span className="glyphicon glyphicon-ok"/> Create
           </button>
         </form>
       </div>
@@ -40,7 +39,7 @@ class SubscriptionForm extends React.Component {
       return;
     }
 
-    const domainLogin = domain.replace('.','');
+    const domainLogin = domain.replace('.', '');
 
     const { serverName } = this.props.match.params;
     const { servers } = this.context.storage;
