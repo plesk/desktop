@@ -8,17 +8,16 @@ class Dashboard extends React.Component {
         <h1 className="page-header">Dashboard</h1>
         <p>
           <Link to="/server/add" className="btn btn-default">
-            <span className="glyphicon glyphicon-plus"></span>&nbsp;
-            Connect a server
+            <span className="glyphicon glyphicon-plus"/> Connect a server
           </Link>
         </p>
         <table className="table table-bordered table-hover">
-          <thead>
+          <tbody>
             <tr>
               <th>Servers</th>
               <td>{Object.keys(this.context.storage.servers).length}</td>
             </tr>
-          </thead>
+          </tbody>
         </table>
       </div>
     );
