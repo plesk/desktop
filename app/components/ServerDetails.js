@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 const electron = window.require('electron');
+import Subscription from '../api-rpc/Subscription';
 
 class ServerDetails extends React.Component {
   render() {
@@ -15,11 +16,11 @@ class ServerDetails extends React.Component {
           <div className="col-xs-12">
             <h1 className="page-header">Server {serverName}</h1>
             <a className="btn btn-default" onClick={this.handleDisconnect.bind(this)}>
-              <span className="glyphicon glyphicon-remove"></span>&nbsp;
+              <span className="glyphicon glyphicon-remove"/>&nbsp;
               Disconnect
             </a>&nbsp;
             <a className="btn btn-default" onClick={this.handleLogin.bind(this)}>
-              <span className="glyphicon glyphicon-log-in"></span>&nbsp;
+              <span className="glyphicon glyphicon-log-in"/>&nbsp;
               Login to Plesk UI
             </a>
           </div>
@@ -53,7 +54,7 @@ class ServerDetails extends React.Component {
         <div className="row">
           <div className="col-xs-12">
             <Link to={`/server/subscription/${serverName}`} className="btn btn-default">
-              <span className="glyphicon glyphicon-plus"></span>&nbsp;
+              <span className="glyphicon glyphicon-plus"/>&nbsp;
               Create Subscription
             </Link>
           </div>
@@ -74,11 +75,11 @@ class ServerDetails extends React.Component {
                       <td>{domain.domain}</td>
                       <td>
                         <a href="#" data-id={domain.domain} className="btn btn-default btn-xs" onClick={this.handleLoginSubscription.bind(this)}>
-                          <span className="glyphicon glyphicon-log-in"></span>&nbsp;
+                          <span className="glyphicon glyphicon-log-in"/>&nbsp;
                           Login
                         </a>&nbsp;
                         <a href="#" data-id={domain.domain} className="btn btn-default btn-xs" onClick={this.handleRemoveSubscription.bind(this)}>
-                          <span className="glyphicon glyphicon-remove"></span>&nbsp;
+                          <span className="glyphicon glyphicon-remove"/>&nbsp;
                           Remove
                         </a>
                       </td>
@@ -95,11 +96,8 @@ class ServerDetails extends React.Component {
 
   handleDisconnect(event) {
     event.preventDefault();
-
     const {serverName} = this.props.match.params;
-
     this.context.storage.disconnectServer(serverName);
-
     this.props.history.push('/');
   }
 
@@ -120,7 +118,7 @@ class ServerDetails extends React.Component {
     const { serverName } = this.props.match.params;
     const { servers } = this.context.storage;
     const { domains } = servers[serverName];
-    const domainDetails = domains.find((item) => item.domain == domain)
+    const domainDetails = domains.find((item) => item.domain === domain);
     const loginUrl = `https://${domainDetails.ip}:8443/login_up.php?login_name=admin&passwd=${domainDetails.password}`;
     electron.shell.openExternal(loginUrl);
   }
@@ -128,8 +126,17 @@ class ServerDetails extends React.Component {
   handleRemoveSubscription(event) {
     event.preventDefault();
     const domain = event.target.getAttribute('data-id');
-    const { serverName } = this.props.match.params;
-    this.context.storage.removeSubscription(serverName, domain);
+    const serverName = this.props.match.params.serverName;
+    const server = this.context.storage.servers[serverName];
+
+    Subscription.remove({
+      server,
+      serverName,
+      domain,
+      callback: () => {
+        this.context.storage.removeSubscription(serverName, domain);
+      }
+    });
   }
 }
 ServerDetails.contextTypes = {
