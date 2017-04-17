@@ -60,6 +60,7 @@ class ConnectForm extends React.Component {
 
           const stats = result.packet.server[0].get[0].result[0].stat[0];
           this.context.storage.connectServer(host, 'admin', password, {
+            isMultiServer: false, // TODO: add detection of Plesk MultiServer instance
             version: stats.version[0].plesk_version[0],
             os: stats.version[0].plesk_os[0],
             osVersion: stats.version[0].plesk_os_version[0]

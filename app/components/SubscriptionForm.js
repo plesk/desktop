@@ -47,9 +47,20 @@ class SubscriptionForm extends React.Component {
 
     const { login, password } = server;
 
-    const request =
-      `<packet>
-        <request-settings>
+    const client = new PleskApi.Client(serverName);
+    client.setCredentials(login, password);
+
+    new Promise((resolve, reject) => {
+      client.request('<packet><ip><get/></ip></packet>')
+        .then((response) => {
+          parseString(response, (error, result) => {
+            resolve(result.packet.ip[0].get[0].result[0].addresses[0].ip_info[0].ip_address[0]);
+          });
+        });
+    }).then((ipAddress) => {
+      const requestSettings = !server.details.isMultiServer
+        ? ''
+        : `<request-settings>
           <setting>
             <name>plesk_rpc_forwarding_to_ext</name>
             <value>plesk-multi-server</value>
@@ -62,52 +73,62 @@ class SubscriptionForm extends React.Component {
             <name>ext-plesk-multi-server:sync</name>
             <value>true</value>
           </setting>
-        </request-settings>
-        <webspace>
-          <add>
-            <gen_setup>
-              <name>${domain}</name>
-            </gen_setup>
-            <hosting>
-              <vrt_hst>
-                <property>
-                  <name>ftp_login</name>
-                  <value>${domainLogin}</value>
-                </property>
-                <property>
-                  <name>ftp_password</name>
-                  <value>${domainPassword}</value>
-                </property>
-              </vrt_hst>
-            </hosting>
-            <plan-name>Default domain</plan-name>
-          </add>
-        </webspace>
-      </packet>`;
+        </request-settings>`;
 
-    const client = new PleskApi.Client(serverName);
-    client.setCredentials(login, password);
-    client.request(request)
-      .then((response) => {
-        parseString(response, (error, result) => {
-          if (error) {
-            console.log(error);
-            return;
-          }
+      const request =
+        `<packet>
+          ${requestSettings}
+          <webspace>
+            <add>
+              <gen_setup>
+                <name>${domain}</name>
+                <ip_address>${ipAddress}</ip_address>
+              </gen_setup>
+              <hosting>
+                <vrt_hst>
+                  <property>
+                    <name>ftp_login</name>
+                    <value>${domainLogin}</value>
+                  </property>
+                  <property>
+                    <name>ftp_password</name>
+                    <value>${domainPassword}</value>
+                  </property>
+                  <ip_address>${ipAddress}</ip_address>
+                </vrt_hst>
+              </hosting>
+              <plan-name>Default domain</plan-name>
+            </add>
+          </webspace>
+        </packet>`;
 
-          if (result.packet.system) {
-            alert(result.packet.system[0].errtext[0]);
-            return;
-          }
+      client.request(request)
+        .then((response) => {
+          parseString(response, (error, result) => {
+            if (error) {
+              console.log(error);
+              return;
+            }
 
-          const ip = result.packet.webspace[0].add[0].result[0].ip[0];
-          this.context.storage.addSubscription(serverName, domain, domainPassword, ip);
-          this.props.history.push(`/server/show/${serverName}`);
+            if (result.packet.system) {
+              alert(result.packet.system[0].errtext[0]);
+              return;
+            }
+
+            if ('error' === result.packet.webspace[0].add[0].result[0].status[0]) {
+              alert(result.packet.webspace[0].add[0].result[0].errtext[0]);
+              return;
+            }
+
+            const ip = !server.details.isMultiServer ? serverName : result.packet.webspace[0].add[0].result[0].ip[0];
+            this.context.storage.addSubscription(serverName, domain, domainPassword, ip);
+            this.props.history.push(`/server/show/${serverName}`);
+          });
+        })
+        .catch((error) => {
+          alert(error.message);
         });
-      })
-      .catch((error) => {
-        alert(error.message);
-      });
+    });
   }
 }
 SubscriptionForm.contextTypes = {
