@@ -85,7 +85,7 @@ class SubscriptionForm extends React.Component {
         </webspace>
       </packet>`;
 
-    const client = new PleskApi.Client(serverName, 8880, 'http');
+    const client = new PleskApi.Client(serverName);
     client.setCredentials(login, password);
     client.request(request)
       .then((response) => {
