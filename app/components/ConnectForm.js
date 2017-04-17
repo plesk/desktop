@@ -6,7 +6,7 @@ class ConnectForm extends React.Component {
   render() {
     return (
       <div>
-        <h2>Add a new Server</h2>
+        <h2>Add a New Server</h2>
         <form onSubmit={this.handleSubmit.bind(this)}>
           <div className="form-group">
             <label htmlFor="host">Host</label>
