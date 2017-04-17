@@ -20,6 +20,8 @@ function createWindow() {
   });
 }
 
+app.commandLine.appendSwitch('ignore-certificate-errors');
+
 app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {

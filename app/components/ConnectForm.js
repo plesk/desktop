@@ -43,7 +43,7 @@ class ConnectForm extends React.Component {
         <server><get><stat/></get></server>
       </packet>`;
 
-    const client = new PleskApi.Client(host, 8880, 'http');
+    const client = new PleskApi.Client(host);
     client.setCredentials('admin', password);
     client.request(request)
       .then((response) => {
