@@ -4,3 +4,4 @@
 @import "{{ site.theme }}";
 
 header h1:before { content: ""; }
+header h1 { margin: 0; }
