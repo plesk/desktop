@@ -28,7 +28,6 @@
     "electron": "~1.6.2",
     "electron-builder": "^3.25.0",
     "electron-packager": "^7.0.1",
-    "electron-prebuilt": "^1.4.13",
     "watchify": "^3.9.0"
   },
   "dependencies": {
