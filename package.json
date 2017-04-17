@@ -6,7 +6,8 @@
   "scripts": {
     "start": "electron .",
     "watch": "watchify app/app.js -t babelify -o js/bundle.js",
-    "build:osx": "electron-packager ./ --overwrite --platform=darwin --arch=x64 --out=dist/osx --icon build/icon.icns"
+    "build:osx": "electron-packager ./ --overwrite --platform=darwin --arch=x64 --out=dist/osx --icon build/icon.icns",
+    "build:installer:osx": "electron-installer-dmg --out=dist/osx/ dist/osx/plesk-desktop-darwin-x64/plesk-desktop.app/ PleskDesktop"
   },
   "author": "Plesk",
   "license": "Apache-2.0",
@@ -27,6 +28,7 @@
   "devDependencies": {
     "electron": "~1.6.2",
     "electron-builder": "^3.25.0",
+    "electron-installer-dmg": "^0.2.1",
     "electron-packager": "^7.0.1",
     "watchify": "^3.9.0"
   },
