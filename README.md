@@ -2,6 +2,8 @@
 
 Desktop app for Plesk servers management.
 
+Additional details: https://plesk.github.io/desktop/
+
 # Development Environment
 
 Installation instructions:
