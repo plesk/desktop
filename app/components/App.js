@@ -15,7 +15,7 @@ export default class App extends React.Component {
         <Router>
           <div className="container-fluid">
             <div className="row">
-              <div className="col-sm-2 col-xs-3 sidebar">
+              <div className="col-sm-3 sidebar">
                 <ul className="nav nav-sidebar">
                   <li><Link to="/"><span className="glyphicon glyphicon-home"></span>&nbsp;Dashboard</Link></li>
                 </ul>
@@ -26,7 +26,7 @@ export default class App extends React.Component {
                   <li><Link to="/about"><span className="glyphicon glyphicon-question-sign"></span>&nbsp;About</Link></li>
                 </ul>
               </div>
-              <div className="col-sm-10 col-sm-offset-2 col-xs-9 col-xs-offset-3 main">
+              <div className="col-sm-9 col-sm-offset-3 main">
                 <Route exact path="/" component={Dashboard}/>
                 <Route path="/server/add" component={ConnectForm}/>
                 <Route path="/server/show/:serverName" component={ServerDetails}/>
