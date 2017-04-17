@@ -110,7 +110,7 @@ class ServerDetails extends React.Component {
     const { servers } = this.context.storage;
 
     const { login, password } = servers[serverName];
-    const loginUrl = `http://${serverName}:8880/login_up.php?login_name=${login}&passwd=${password}`;
+    const loginUrl = `https://${serverName}:8443/login_up.php?login_name=${login}&passwd=${password}`;
     electron.shell.openExternal(loginUrl);
   }
 
@@ -121,7 +121,7 @@ class ServerDetails extends React.Component {
     const { servers } = this.context.storage;
     const { domains } = servers[serverName];
     const domainDetails = domains.find((item) => item.domain == domain)
-    const loginUrl = `http://${domainDetails.ip}:8880/login_up.php?login_name=admin&passwd=${domainDetails.password}`;
+    const loginUrl = `https://${domainDetails.ip}:8443/login_up.php?login_name=admin&passwd=${domainDetails.password}`;
     electron.shell.openExternal(loginUrl);
   }
 
