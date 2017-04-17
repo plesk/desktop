@@ -1,8 +1,12 @@
 import React from 'react';
-import PleskApi from 'plesk-api-client';
-import { parseString } from 'xml2js';
+import Subscription from '../api-rpc/Subscription';
 
 class SubscriptionForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { loading: false };
+  }
+
   render() {
     return (
       <div>
@@ -10,14 +14,19 @@ class SubscriptionForm extends React.Component {
         <form onSubmit={this.handleSubmit.bind(this)}>
           <div className="form-group">
             <label htmlFor="domain">Domain Name</label>
-            <input type="text" className="form-control" id="domain" placeholder="domain.com"/>
+            <input type="text" className="form-control" id="domain" placeholder="domain.com" readOnly={this.state.loading}/>
           </div>
           <div className="form-group">
             <label type="text" htmlFor="pw">Password</label>
-            <input type="password" className="form-control" id="pw" placeholder="password"/>
+            <input type="password" className="form-control" id="pw" placeholder="password" readOnly={this.state.loading}/>
           </div>
-          <button type="submit" className="btn btn-default">
-            <span className="glyphicon glyphicon-ok"/> Create
+          <button type="submit" className="btn btn-default" disabled={this.state.loading}>
+            {this.state.loading ? [
+              'Please wait...',
+            ] : [
+              <span className="glyphicon glyphicon-ok"/>,
+              ' Create',
+            ]}
           </button>
         </form>
       </div>
@@ -26,121 +35,44 @@ class SubscriptionForm extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    let domain = event.target.querySelector('#domain');
-    let pw = event.target.querySelector('#pw');
-    const button = event.target.querySelector('.btn');
-    button.textContent = 'Please wait...';
-    this.createSubscription(domain.value, pw.value);
-  }
 
-  createSubscription(domain, domainPassword) {
-    if (!domain) {
-      alert('Please define the domain name');
-      return;
-    }
+    const domain = event.target.querySelector('#domain').value;
+    const password = event.target.querySelector('#pw').value;
+    const serverName = this.props.match.params.serverName;
+    const server = this.context.storage.servers[serverName];
 
-    const domainLogin = domain.replace('.', '');
+    this.setState({ loading: true });
 
-    const { serverName } = this.props.match.params;
-    const { servers } = this.context.storage;
-    const server = servers[serverName];
+    Subscription.create({
+      server,
+      serverName,
+      domain,
+      password,
+      callback: (error, result) => {
+        this.setState({ loading: false });
 
-    const { login, password } = server;
-
-    const client = new PleskApi.Client(serverName);
-    client.setCredentials(login, password);
-
-    new Promise((resolve, reject) => {
-      client.request('<packet><ip><get/></ip></packet>')
-        .then((response) => {
-          parseString(response, (error, result) => {
-            resolve(result.packet.ip[0].get[0].result[0].addresses[0].ip_info[0].ip_address[0]);
-          });
-        });
-    }).then((ipAddress) => {
-      const requestSettings = server.details.isMultiServer ? this._getMultiServerRequestSettings() : '';
-      const request = this._getSubscriptionCreationPacket(requestSettings, domain, domainLogin, domainPassword, ipAddress);
-
-      client.request(request)
-        .then((response) => {
-          parseString(response, (error, result) => {
-            if (error) {
-              console.log(error);
-              return;
-            }
-
-            if (result.packet.system) {
-              alert(result.packet.system[0].errtext[0]);
-              return;
-            }
-
-            if ('error' === result.packet.webspace[0].add[0].result[0].status[0]) {
-              alert(result.packet.webspace[0].add[0].result[0].errtext[0]);
-              return;
-            }
-
-            const ip = !server.details.isMultiServer ? serverName : result.packet.webspace[0].add[0].result[0].ip[0];
-            this.context.storage.addSubscription(serverName, domain, domainPassword, ip);
-            this.props.history.push(`/server/show/${serverName}`);
-          });
-        })
-        .catch((error) => {
-          alert(error.message);
-        });
+        if (error) {
+          console.log(error);
+          return;
+        }
+        if (result.packet.system) {
+          alert(result.packet.system[0].errtext[0]);
+          return;
+        }
+        if ('error' === result.packet.webspace[0].add[0].result[0].status[0]) {
+          alert(result.packet.webspace[0].add[0].result[0].errtext[0]);
+          return;
+        }
+        const ip = !server.details.isMultiServer ? serverName : result.packet.webspace[0].add[0].result[0].ip[0];
+        this.context.storage.addSubscription(serverName, domain, password, ip);
+        this.props.history.push(`/server/show/${serverName}`);
+      },
     });
   }
-
-  _getMultiServerRequestSettings() {
-    return (
-      `<request-settings>
-        <setting>
-          <name>plesk_rpc_forwarding_to_ext</name>
-          <value>plesk-multi-server</value>
-        </setting>
-        <setting>
-          <name>ext-plesk-multi-server:ipv4</name>
-          <value>shared</value>
-        </setting>
-        <setting>
-          <name>ext-plesk-multi-server:sync</name>
-          <value>true</value>
-        </setting>
-      </request-settings>`
-    );
-  }
-
-  _getSubscriptionCreationPacket(requestSettings, domain, domainLogin, domainPassword, ipAddress) {
-    return (
-      `<packet>
-        ${requestSettings}
-        <webspace>
-          <add>
-            <gen_setup>
-              <name>${domain}</name>
-              <ip_address>${ipAddress}</ip_address>
-            </gen_setup>
-            <hosting>
-              <vrt_hst>
-                <property>
-                  <name>ftp_login</name>
-                  <value>${domainLogin}</value>
-                </property>
-                <property>
-                  <name>ftp_password</name>
-                  <value>${domainPassword}</value>
-                </property>
-                <ip_address>${ipAddress}</ip_address>
-              </vrt_hst>
-            </hosting>
-            <plan-name>Default domain</plan-name>
-          </add>
-        </webspace>
-      </packet>`
-    );
-  }
 }
+
 SubscriptionForm.contextTypes = {
-    storage: React.PropTypes.object,
+  storage: React.PropTypes.object,
 };
 
 export default SubscriptionForm;

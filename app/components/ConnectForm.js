@@ -75,7 +75,7 @@ class ConnectForm extends React.Component {
   }
 }
 ConnectForm.contextTypes = {
-    storage: React.PropTypes.object,
+  storage: React.PropTypes.object,
 };
 
 export default ConnectForm;
