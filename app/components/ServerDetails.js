@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import ExternalLink from './ExternalLink';
-import Subscription from '../api-rpc/Subscription';
+import PleskUtils from '../utils/PleskUtils';
 
 class ServerDetails extends React.Component {
   render() {
@@ -111,7 +111,7 @@ class ServerDetails extends React.Component {
     const serverName = this.props.match.params.serverName;
     const server = this.context.storage.servers[serverName];
 
-    Subscription.remove({
+    PleskUtils.subscription.remove({
       server,
       serverName,
       domain,

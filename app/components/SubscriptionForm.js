@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Subscription from '../api-rpc/Subscription';
+import PleskUtils from '../utils/PleskUtils';
 
 class SubscriptionForm extends React.Component {
   constructor(props) {
@@ -48,7 +48,7 @@ class SubscriptionForm extends React.Component {
 
     this.setState({ loading: true });
 
-    Subscription.create({
+    PleskUtils.subscription.create({
       server,
       serverName,
       domain,

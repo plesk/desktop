@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import PleskApi from 'plesk-api-client';
-import { parseString } from 'xml2js';
+import PleskUtils from '../utils/PleskUtils';
 
 class ConnectForm extends React.Component {
   render() {
@@ -30,49 +29,13 @@ class ConnectForm extends React.Component {
     event.preventDefault();
     let host = event.target.querySelector('#host');
     let pw = event.target.querySelector('#pw');
-    this.connectServer(host.value, pw.value);
-  }
 
-  connectServer(host, password) {
     if (!host) {
       alert('Please define the host');
       return;
     }
 
-    const request =
-      `<packet>
-        <server><get><stat/></get></server>
-      </packet>`;
-
-    const client = new PleskApi.Client(host);
-    client.setCredentials('admin', password);
-    client.request(request)
-      .then((response) => {
-        parseString(response, (error, result) => {
-          if (error) {
-            console.log(error);
-            return;
-          }
-
-          if (result.packet.system) {
-            alert(result.packet.system[0].errtext[0]);
-            return;
-          }
-
-          const stats = result.packet.server[0].get[0].result[0].stat[0];
-          this.context.storage.connectServer(host, 'admin', password, {
-            isMultiServer: false, // TODO: add detection of Plesk MultiServer instance
-            version: stats.version[0].plesk_version[0],
-            os: stats.version[0].plesk_os[0],
-            osVersion: stats.version[0].plesk_os_version[0]
-          });
-
-          this.props.history.push('/');
-        });
-      })
-      .catch((error) => {
-        alert(error.message);
-      });
+    PleskUtils.connectServer(host.value, 'admin', pw.value, this.context.storage, () => this.props.history.push('/'));
   }
 }
 

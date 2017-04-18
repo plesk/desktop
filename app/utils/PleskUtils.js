@@ -1,9 +1,8 @@
 import PleskApi from 'plesk-api-client';
 import { parseString } from 'xml2js';
 
-function Subscription() {
-
-  function _getMultiServerRequestSettings() {
+const Subscription = {
+  _getMultiServerRequestSettings() {
     return (
       `<request-settings>
         <setting>
@@ -20,9 +19,9 @@ function Subscription() {
         </setting>
       </request-settings>`
     );
-  }
+  },
 
-  function _getSubscriptionCreationPacket(requestSettings, domain, domainLogin, domainPassword, ipAddress) {
+  _getSubscriptionCreationPacket(requestSettings, domain, domainLogin, domainPassword, ipAddress) {
     return (
       `<packet>
         ${requestSettings}
@@ -50,16 +49,15 @@ function Subscription() {
         </webspace>
       </packet>`
     );
-  }
+  },
 
-  function create({ domain, domainLogin, password, server, serverName, callback }) {
+  create({ domain, domainLogin, password, server, serverName, callback }) {
     if (!domain) {
-      alert('Please define the domain name');
+      alert('Please define the domain name.');
       return;
     }
 
     const client = new PleskApi.Client(serverName);
-
     client.setCredentials(server.login, server.password);
 
     new Promise((resolve) => {
@@ -84,19 +82,13 @@ function Subscription() {
             alert(error.message);
           });
       });
-  }
+  },
 
-  function remove({ domain, server, serverName, callback }) {
-    if (!domain) {
-      alert('Please define the domain name');
-      return;
-    }
-
+  remove({ domain, server, serverName, callback }) {
     const client = new PleskApi.Client(serverName);
-
     client.setCredentials(server.login, server.password);
 
-    let request =
+    const request =
       `<packet>
         <webspace>
           <del>
@@ -116,8 +108,47 @@ function Subscription() {
         });
     });
   }
-
-  return { create, remove };
 }
 
-export default (new Subscription);
+const PleskUtils = {
+  subscription: Subscription,
+
+  connectServer(host, login, password, storage, callback) {
+    const request =
+      `<packet>
+        <server><get><stat/></get></server>
+      </packet>`;
+
+    const client = new PleskApi.Client(host);
+    client.setCredentials(login, password);
+    client.request(request)
+      .then((response) => {
+        parseString(response, (error, result) => {
+          if (error) {
+            console.log(error);
+            return;
+          }
+
+          if (result.packet.system) {
+            alert(result.packet.system[0].errtext[0]);
+            return;
+          }
+
+          const stats = result.packet.server[0].get[0].result[0].stat[0];
+          storage.connectServer(host, 'admin', password, {
+            isMultiServer: false, // TODO: add detection of Plesk MultiServer instance
+            version: stats.version[0].plesk_version[0],
+            os: stats.version[0].plesk_os[0],
+            osVersion: stats.version[0].plesk_os_version[0]
+          });
+
+          callback();
+        });
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
+  }
+}
+
+export default PleskUtils;
