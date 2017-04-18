@@ -22,12 +22,11 @@ class SubscriptionForm extends React.Component {
             <input type="password" className="form-control" id="pw" placeholder="password" readOnly={this.state.loading}/>
           </div>
           <button type="submit" className="btn btn-default" disabled={this.state.loading}>
-            {this.state.loading ? [
-              'Please wait...',
-            ] : [
-              <span className="glyphicon glyphicon-ok"/>,
-              ' Create',
-            ]}
+            {this.state.loading ? (
+              'Please wait...'
+            ) : (
+              <span><span className="glyphicon glyphicon-ok"/> Create</span>
+            )}
           </button>
         </form>
       </div>
