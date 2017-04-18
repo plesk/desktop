@@ -11,6 +11,10 @@
   },
   "author": "Plesk",
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:plesk/desktop.git"
+  },
   "build": {
     "app-bundle-id": "com.plesk.plesk-desktop",
     "app-category-type": "public.app-category.developer-tools",
