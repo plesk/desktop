@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-const electron = window.require('electron');
+import ExternalLink from './ExternalLink';
 import Subscription from '../api-rpc/Subscription';
 
 class ServerDetails extends React.Component {
@@ -9,6 +9,9 @@ class ServerDetails extends React.Component {
     const { servers } = this.context.storage;
     const server = servers[serverName];
     const domains = server && server.domains || [];
+
+    const { login, password } = server ? server : {};
+    const loginUrl = `https://${serverName}:8443/login_up.php?login_name=${login}&passwd=${password}`;
 
     return (
       <div>
@@ -19,10 +22,10 @@ class ServerDetails extends React.Component {
               <span className="glyphicon glyphicon-remove"/>&nbsp;
               Disconnect
             </a>&nbsp;
-            <a className="btn btn-default" onClick={this.handleLogin.bind(this)}>
+            <ExternalLink className="btn btn-default" href={loginUrl}>
               <span className="glyphicon glyphicon-log-in"/>&nbsp;
               Login to Plesk UI
-            </a>
+            </ExternalLink>
           </div>
         </div>
         <div className="row top-buffer">
@@ -74,10 +77,10 @@ class ServerDetails extends React.Component {
                     <tr key={domain.domain}>
                       <td>{domain.domain}</td>
                       <td>
-                        <a href="#" data-id={domain.domain} className="btn btn-default btn-xs" onClick={this.handleLoginSubscription.bind(this)}>
+                        <ExternalLink className="btn btn-default btn-xs" href={loginUrl}>
                           <span className="glyphicon glyphicon-log-in"/>&nbsp;
                           Login
-                        </a>&nbsp;
+                        </ExternalLink>&nbsp;
                         <a href="#" data-id={domain.domain} className="btn btn-default btn-xs" onClick={this.handleRemoveSubscription.bind(this)}>
                           <span className="glyphicon glyphicon-remove"/>&nbsp;
                           Remove
@@ -99,28 +102,6 @@ class ServerDetails extends React.Component {
     const {serverName} = this.props.match.params;
     this.context.storage.disconnectServer(serverName);
     this.props.history.push('/');
-  }
-
-  handleLogin(event) {
-    event.preventDefault();
-
-    const { serverName } = this.props.match.params;
-    const { servers } = this.context.storage;
-
-    const { login, password } = servers[serverName];
-    const loginUrl = `https://${serverName}:8443/login_up.php?login_name=${login}&passwd=${password}`;
-    electron.shell.openExternal(loginUrl);
-  }
-
-  handleLoginSubscription(event) {
-    event.preventDefault();
-    const domain = event.target.getAttribute('data-id');
-    const { serverName } = this.props.match.params;
-    const { servers } = this.context.storage;
-    const { domains } = servers[serverName];
-    const domainDetails = domains.find((item) => item.domain === domain);
-    const loginUrl = `https://${domainDetails.ip}:8443/login_up.php?login_name=admin&passwd=${domainDetails.password}`;
-    electron.shell.openExternal(loginUrl);
   }
 
   handleRemoveSubscription(event) {
