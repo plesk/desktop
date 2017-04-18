@@ -18,6 +18,10 @@ class SubscriptionForm extends React.Component {
             <input type="text" className="form-control" id="domain" placeholder="domain.com" readOnly={this.state.loading}/>
           </div>
           <div className="form-group">
+            <label type="text" htmlFor="login">Login</label>
+            <input type="text" className="form-control" id="login" placeholder="login" readOnly={this.state.loading}/>
+          </div>
+          <div className="form-group">
             <label type="text" htmlFor="pw">Password</label>
             <input type="password" className="form-control" id="pw" placeholder="password" readOnly={this.state.loading}/>
           </div>
@@ -37,6 +41,7 @@ class SubscriptionForm extends React.Component {
     event.preventDefault();
 
     const domain = event.target.querySelector('#domain').value;
+    const domainLogin = event.target.querySelector('#login').value;
     const password = event.target.querySelector('#pw').value;
     const serverName = this.props.match.params.serverName;
     const server = this.context.storage.servers[serverName];
@@ -47,6 +52,7 @@ class SubscriptionForm extends React.Component {
       server,
       serverName,
       domain,
+      domainLogin,
       password,
       callback: (error, result) => {
         this.setState({ loading: false });

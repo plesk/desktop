@@ -52,13 +52,12 @@ function Subscription() {
     );
   }
 
-  function create({ domain, password, server, serverName, callback }) {
+  function create({ domain, domainLogin, password, server, serverName, callback }) {
     if (!domain) {
       alert('Please define the domain name');
       return;
     }
 
-    const domainLogin = domain.replace('.', '');
     const client = new PleskApi.Client(serverName);
 
     client.setCredentials(server.login, server.password);
