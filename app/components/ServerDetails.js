@@ -21,13 +21,17 @@ class ServerDetails extends React.Component {
         <div className="row">
           <div className="col-xs-12">
             <h1 className="page-header">Server {serverName}</h1>
-            <a className="btn btn-default" onClick={this.handleDisconnect.bind(this)}>
-              <span className="glyphicon glyphicon-remove"/>&nbsp;
-              Disconnect
-            </a>&nbsp;
             <a className="btn btn-default" onClick={this.handleLogin.bind(this)} disabled={this.state.serverLoginGeneration}>
               <span className="glyphicon glyphicon-log-in"/>&nbsp;
               Login to Plesk UI
+            </a>&nbsp;
+            <a className="btn btn-default" onClick={this.handleSync.bind(this)}>
+              <span className="glyphicon glyphicon-refresh"/>&nbsp;
+              Sync
+            </a>&nbsp;
+            <a className="btn btn-default" onClick={this.handleDisconnect.bind(this)}>
+              <span className="glyphicon glyphicon-remove"/>&nbsp;
+              Disconnect
             </a>
           </div>
         </div>
@@ -131,6 +135,24 @@ class ServerDetails extends React.Component {
     const {serverName} = this.props.match.params;
     this.context.storage.disconnectServer(serverName);
     this.props.history.push('/');
+  }
+
+  handleSync(event) {
+    event.preventDefault();
+    const serverName = this.props.match.params.serverName;
+    const server = this.context.storage.servers[serverName];
+    PleskUtils.syncServerState({
+      server,
+      serverName,
+      callback: (webspaces) => {
+        this.context.storage.findSubscriptions(serverName, webspaces.map((webspace) => {
+          return {
+            domain: webspace.data[0].gen_info[0].name[0],
+            domainId: webspace.id[0]
+          };
+        }));
+      }
+    });
   }
 
   handleRemoveSubscription(event) {

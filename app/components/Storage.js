@@ -38,7 +38,8 @@ class Storage extends Component {
         connectServer: this.connectServer.bind(this),
         disconnectServer: this.disconnectServer.bind(this),
         addSubscription: this.addSubscription.bind(this),
-        removeSubscription: this.removeSubscription.bind(this)
+        removeSubscription: this.removeSubscription.bind(this),
+        findSubscriptions: this.findSubscriptions.bind(this)
       },
     };
   }
@@ -72,6 +73,15 @@ class Storage extends Component {
     const { servers } = this.state;
     servers[host].domains = servers[host].domains || [];
     servers[host].domains = servers[host].domains.filter((item) => domain !== item.domain);
+    this.saveServersState(servers);
+  }
+
+  findSubscriptions(host, domains) {
+    const { servers } = this.state;
+    servers[host].domains = [];
+    domains.forEach(({ domain, domainId }) => {
+      this.addSubscription(host, domain, domainId, '', '', '');
+    });
     this.saveServersState(servers);
   }
 

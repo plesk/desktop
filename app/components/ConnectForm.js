@@ -35,7 +35,25 @@ class ConnectForm extends React.Component {
       return;
     }
 
-    PleskUtils.connectServer(host.value, 'admin', pw.value, this.context.storage, () => this.props.history.push('/'));
+    PleskUtils.connectServer(host.value, 'admin', pw.value, this.context.storage, () => {
+      const serverName = host.value;
+      const server = this.context.storage.servers[serverName];
+      PleskUtils.syncServerState({
+        server,
+        serverName,
+        callback: (webspaces) => {
+          this.context.storage.findSubscriptions(serverName, webspaces.map((webspace) => {
+            return {
+              domain: webspace.data[0].gen_info[0].name[0],
+              domainId: webspace.id[0]
+            };
+          }));
+        }
+      });
+
+      this.props.history.push('/');
+    });
+
   }
 }
 

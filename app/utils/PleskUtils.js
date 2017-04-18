@@ -150,6 +150,32 @@ const PleskUtils = {
       });
   },
 
+  syncServerState({ server, serverName, callback }) {
+    const client = new PleskApi.Client(serverName);
+    client.setCredentials(server.login, server.password);
+
+    const request = (
+      `<packet>
+        <webspace>
+          <get>
+            <filter/>
+            <dataset>
+              <gen_info/>
+            </dataset>
+          </get>
+        </webspace>
+      </packet>`
+    );
+
+    client.request(request)
+      .then((response) => {
+        parseString(response, (error, result) => {
+          const webspaces = result.packet.webspace[0].get[0].result;
+          callback(webspaces);
+        })
+      });
+  },
+
   generateLoginUrl({ server, serverName, callback }) {
     const client = new PleskApi.Client(serverName);
     client.setCredentials(server.login, server.password);
