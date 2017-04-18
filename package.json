@@ -7,6 +7,7 @@
     "start": "electron .",
     "watch": "watchify app/app.js -t babelify -o js/bundle.js",
     "build:osx": "electron-packager ./ --overwrite --platform=darwin --arch=x64 --out=dist/osx --icon build/icon.icns",
+    "build:win": "electron-packager ./ --overwrite --platform=win32 --arch=x64 --out=dist/win --icon build/icon.ico",
     "build:installer:osx": "electron-installer-dmg --out=dist/osx/ dist/osx/plesk-desktop-darwin-x64/plesk-desktop.app/ PleskDesktop"
   },
   "author": "Plesk",
