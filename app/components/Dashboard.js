@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 class Dashboard extends React.Component {
@@ -23,8 +24,9 @@ class Dashboard extends React.Component {
     );
   }
 }
+
 Dashboard.contextTypes = {
-  storage: React.PropTypes.object,
+  storage: PropTypes.object,
 };
 
 export default Dashboard;

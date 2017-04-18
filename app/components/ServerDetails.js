@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import ExternalLink from './ExternalLink';
 import Subscription from '../api-rpc/Subscription';
@@ -120,8 +121,9 @@ class ServerDetails extends React.Component {
     });
   }
 }
+
 ServerDetails.contextTypes = {
-  storage: React.PropTypes.object,
+  storage: PropTypes.object,
 };
 
 export default ServerDetails;

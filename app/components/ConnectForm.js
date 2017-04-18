@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import PleskApi from 'plesk-api-client';
 import { parseString } from 'xml2js';
 
@@ -74,8 +75,9 @@ class ConnectForm extends React.Component {
       });
   }
 }
+
 ConnectForm.contextTypes = {
-  storage: React.PropTypes.object,
+  storage: PropTypes.object,
 };
 
 export default ConnectForm;

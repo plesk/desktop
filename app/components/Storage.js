@@ -1,4 +1,6 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
 const storage = window.require && window.require('electron-json-storage') || {
   set: (key, json, callback) => {
     localStorage.setItem(key, JSON.stringify(json));

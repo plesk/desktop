@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Subscription from '../api-rpc/Subscription';
 
 class SubscriptionForm extends React.Component {
@@ -72,7 +73,7 @@ class SubscriptionForm extends React.Component {
 }
 
 SubscriptionForm.contextTypes = {
-  storage: React.PropTypes.object,
+  storage: PropTypes.object,
 };
 
 export default SubscriptionForm;
