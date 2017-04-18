@@ -70,8 +70,8 @@ const Subscription = {
         });
       })
       .then((ipAddress) => {
-        const requestSettings = server.details.isMultiServer ? _getMultiServerRequestSettings() : '';
-        const request = _getSubscriptionCreationPacket(requestSettings, domain, domainLogin, password, ipAddress);
+        const requestSettings = server.details.isMultiServer ? this._getMultiServerRequestSettings() : '';
+        const request = this._getSubscriptionCreationPacket(requestSettings, domain, domainLogin, password, ipAddress);
 
         client
           .request(request)
@@ -147,6 +147,34 @@ const PleskUtils = {
       })
       .catch((error) => {
         alert(error.message);
+      });
+  },
+
+  generateLoginUrl({ server, serverName, callback }) {
+    const client = new PleskApi.Client(serverName);
+    client.setCredentials(server.login, server.password);
+
+    const request = (
+      `<packet>
+        <server>
+          <create_session>
+            <login>${server.login}</login>
+            <data>
+              <user_ip></user_ip>
+              <source_server></source_server>
+            </data>
+          </create_session>
+        </server>
+      </packet>`
+    );
+
+    client.request(request)
+      .then((response) => {
+        parseString(response, (error, result) => {
+          const sessionId = result.packet.server[0].create_session[0].result[0].id[0];
+          const loginUrl = `https://${serverName}:8443/enterprise/rsession_init.php?PLESKSESSID=${sessionId}`;
+          callback(loginUrl);
+        })
       });
   }
 }

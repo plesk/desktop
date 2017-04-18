@@ -55,11 +55,13 @@ class Storage extends Component {
     this.saveServersState(servers);
   }
 
-  addSubscription(host, domain, password, ip) {
+  addSubscription(host, domain, domainId, login, password, ip) {
     const { servers } = this.state;
     servers[host].domains = servers[host].domains || [];
     servers[host].domains.push({
+      domainId: domainId,
       domain: domain,
+      login: login,
       password: password,
       ip: ip
     });

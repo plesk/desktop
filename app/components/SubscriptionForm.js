@@ -70,7 +70,8 @@ class SubscriptionForm extends React.Component {
           return;
         }
         const ip = !server.details.isMultiServer ? serverName : result.packet.webspace[0].add[0].result[0].ip[0];
-        this.context.storage.addSubscription(serverName, domain, password, ip);
+        const domainId = result.packet.webspace[0].add[0].result[0].id[0];
+        this.context.storage.addSubscription(serverName, domain, domainId, domainLogin, password, ip);
         this.props.history.push(`/server/show/${serverName}`);
       },
     });

@@ -5,14 +5,16 @@ import ExternalLink from './ExternalLink';
 import PleskUtils from '../utils/PleskUtils';
 
 class ServerDetails extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { serverLoginGeneration: false };
+  }
+
   render() {
     const { serverName } = this.props.match.params;
     const { servers } = this.context.storage;
     const server = servers[serverName];
     const domains = server && server.domains || [];
-
-    const { login, password } = server ? server : {};
-    const loginUrl = `https://${serverName}:8443/login_up.php?login_name=${login}&passwd=${password}`;
 
     return (
       <div>
@@ -23,10 +25,10 @@ class ServerDetails extends React.Component {
               <span className="glyphicon glyphicon-remove"/>&nbsp;
               Disconnect
             </a>&nbsp;
-            <ExternalLink className="btn btn-default" href={loginUrl}>
+            <a className="btn btn-default" onClick={this.handleLogin.bind(this)} disabled={this.state.serverLoginGeneration}>
               <span className="glyphicon glyphicon-log-in"/>&nbsp;
               Login to Plesk UI
-            </ExternalLink>
+            </a>
           </div>
         </div>
         <div className="row top-buffer">
@@ -78,10 +80,10 @@ class ServerDetails extends React.Component {
                     <tr key={domain.domain}>
                       <td>{domain.domain}</td>
                       <td>
-                        <ExternalLink className="btn btn-default btn-xs" href={loginUrl}>
+                        <a data-id={domain.domainId} className="btn btn-default btn-xs" onClick={this.handleLogin.bind(this)}>
                           <span className="glyphicon glyphicon-log-in"/>&nbsp;
                           Login
-                        </ExternalLink>&nbsp;
+                        </a>&nbsp;
                         <a href="#" data-id={domain.domain} className="btn btn-default btn-xs" onClick={this.handleRemoveSubscription.bind(this)}>
                           <span className="glyphicon glyphicon-remove"/>&nbsp;
                           Remove
@@ -96,6 +98,32 @@ class ServerDetails extends React.Component {
         </div>
       </div>
     );
+  }
+
+  handleLogin(event) {
+    event.preventDefault();
+    const serverName = this.props.match.params.serverName;
+    const server = this.context.storage.servers[serverName];
+    const domainId = event.target.getAttribute('data-id');
+
+    if (!domainId) {
+      this.setState({ serverLoginGeneration: true });
+    }
+
+    PleskUtils.generateLoginUrl({
+      server,
+      serverName,
+      callback: (url) => {
+        if (domainId) {
+          url = `${url}&success_redirect_url=/admin/subscription/overview/id/${domainId}`;
+        } else {
+          this.setState({ serverLoginGeneration: false });
+        }
+
+        const electron = window.require('electron');
+        electron.shell.openExternal(url);
+      }
+    });
   }
 
   handleDisconnect(event) {
